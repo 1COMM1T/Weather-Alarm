@@ -1,5 +1,5 @@
 ---
-name: "\U0001F408‍⬛[Test] 테스트 코드 추가 템플릿"
+name: "\U0001F408‍⬛ [Test] 테스트 코드 추가 템플릿"
 about: Describe this issue template's purpose here.
 title: "\U0001F408‍⬛[Test]"
 labels: ''

@@ -1,5 +1,5 @@
 ---
-name: "\U0001F41E[Bug] 버그 리포트 템플릿"
+name: "\U0001F41E [Bug] 버그 리포트 템플릿"
 about: Create a report to help us improve
 title: "\U0001F41E[Bug]"
 labels: ''

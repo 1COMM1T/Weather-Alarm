@@ -1,5 +1,5 @@
 ---
-name: "\U0001F3A8[Rename] 파일명 or 폴더명 변경 템플릿"
+name: "\U0001F3A8 [Rename] 파일명 or 폴더명 변경 템플릿"
 about: Describe this issue template's purpose here.
 title: "\U0001F3A8[Rename]"
 labels: ''
