@@ -24,9 +24,8 @@ public class WeatherMappingsController {
     }
 
     @GetMapping("")
-    public ResponseEntity<KeyView> searchFileByEmail(@RequestParam(value = "email", required = true) String email) throws IOException {
-        KeyView result = weatherMappingsService.searchFileByEmail(email);
+    public ResponseEntity<KeyView> getKeyByEmail(@RequestParam(value = "email", required = true) String email) throws IOException {
+        KeyView result = weatherMappingsService.getKeyByEmail(email);
         return ResponseEntity.status(HttpStatus.OK).body(result);
-
     }
 }

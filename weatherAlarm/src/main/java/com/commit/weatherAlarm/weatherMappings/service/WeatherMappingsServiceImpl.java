@@ -36,7 +36,7 @@ public class WeatherMappingsServiceImpl implements WeatherMappingsService {
         this.modelMapper = modelMapper;
     }
 
-    public KeyView searchFileByEmail(String email) throws IOException {
+    public KeyView getKeyByEmail(String email) throws IOException {
         ListObjectsV2Request listObjectsReq = ListObjectsV2Request.builder()
                 .bucket(bucketName)
                 .build();
