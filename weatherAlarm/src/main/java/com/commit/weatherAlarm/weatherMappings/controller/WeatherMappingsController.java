@@ -30,8 +30,14 @@ public class WeatherMappingsController {
     @PostMapping("")
     public ResponseEntity<String> registUserInfo(@RequestBody Map<String, Object> jsonData) throws IOException {
         String key =  System.currentTimeMillis() + ".json";
-        weatherMappingsService.registUserInfo(key, jsonData);
+        weatherMappingsService.setUserInfo(key, jsonData);
         return ResponseEntity.ok("유저정보 생성완료!");
+    }
+
+    @PutMapping("/{key}")
+    public ResponseEntity<String> setAlarmInfo(@PathVariable String key, @RequestBody Map<String, Object> updates) throws IOException {
+        weatherMappingsService.setAlarmInfo(key, updates);
+        return ResponseEntity.ok("JSON file updated successfully with key: " + key);
     }
 
 
