@@ -23,7 +23,7 @@ public class WeatherMappingsController {
         this.weatherMappingsService = weatherMappingsService;
     }
 
-    @GetMapping("")
+    @GetMapping("/key")
     public ResponseEntity<KeyView> getKeyByEmail(@RequestParam(value = "email", required = true) String email) throws IOException {
         KeyView result = weatherMappingsService.getKeyByEmail(email);
         return ResponseEntity.status(HttpStatus.OK).body(result);
