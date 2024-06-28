@@ -5,12 +5,10 @@ import com.commit.weatherAlarm.weatherMappings.view.KeyView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/v1/weather-mappings")
@@ -28,4 +26,13 @@ public class WeatherMappingsController {
         KeyView result = weatherMappingsService.getKeyByEmail(email);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
+
+    @PostMapping("")
+    public ResponseEntity<String> registUserInfo(@RequestBody Map<String, Object> jsonData) throws IOException {
+        String key =  System.currentTimeMillis() + ".json";
+        weatherMappingsService.registUserInfo(key, jsonData);
+        return ResponseEntity.ok("유저정보 생성완료!");
+    }
+
+
 }
