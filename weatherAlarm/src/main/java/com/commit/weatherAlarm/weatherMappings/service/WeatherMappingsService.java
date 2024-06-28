@@ -11,4 +11,6 @@ public interface WeatherMappingsService {
     void setUserInfo(String key, Map<String, Object> jsonData) throws IOException;
 
     void setAlarmInfo(String key, Map<String, Object> updates) throws IOException;
+
+    void deleteUserInfo(String key) throws IOException;
 }

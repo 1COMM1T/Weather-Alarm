@@ -71,6 +71,16 @@ public class WeatherMappingsServiceImpl implements WeatherMappingsService {
         setUserInfo(key, existingData);
     }
 
+    @Override
+    public void deleteUserInfo(String key) {
+        DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .build();
+
+        s3Client.deleteObject(deleteObjectRequest);
+    }
+
     public Map<String, Object> downloadJson(String key) throws IOException {
         File tempFile = File.createTempFile("temp", ".json");
         if (tempFile.exists()) {
