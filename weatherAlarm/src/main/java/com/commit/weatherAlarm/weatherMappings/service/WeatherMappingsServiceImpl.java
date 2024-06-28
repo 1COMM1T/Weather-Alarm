@@ -5,5 +5,5 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class WeatherMappingServiceImpl implements WeatherMappingService{
+public class WeatherMappingsServiceImpl implements WeatherMappingsService {
 }
