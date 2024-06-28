@@ -8,16 +8,16 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.GetObjectRequest;
-import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
-import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
-import software.amazon.awssdk.services.s3.model.S3Object;
+import software.amazon.awssdk.services.s3.model.*;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
@@ -51,6 +51,24 @@ public class WeatherMappingsServiceImpl implements WeatherMappingsService {
             }
         }
         return null;
+    }
+
+    public void registUserInfo(String key, Map<String, Object> jsonData) throws IOException {
+        File jsonFile = convertObjectToJsonFile(jsonData);
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .build();
+        s3Client.putObject(putObjectRequest, RequestBody.fromFile(jsonFile));
+    }
+
+    private File convertObjectToJsonFile(Object data) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        File jsonFile = File.createTempFile("temp", ".json");
+        try (FileOutputStream fos = new FileOutputStream(jsonFile)) {
+            objectMapper.writeValue(fos, data);
+        }
+        return jsonFile;
     }
 
     private JsonNode downloadJsonfile(String key) throws IOException {
@@ -98,4 +116,6 @@ public class WeatherMappingsServiceImpl implements WeatherMappingsService {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readTree(file);
     }
+
+
 }
