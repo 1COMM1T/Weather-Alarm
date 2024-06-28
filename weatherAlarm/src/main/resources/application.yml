@@ -1,24 +1,17 @@
 spring:
-  datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-
   jpa:
     generate-ddl: false
     show-sql: true
     properties:
       hibernate:
         '[format_sql]': true
-    database: mysql
 
-#aws:
-#  s3:
-#    access-key: YOUR_ACCESS_KEY
-#    secret-key: YOUR_SECRET_KEY
-#    region: YOUR_AWS_REGION
-#    bucket: YOUR_BUCKET_NAME
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
 
 server:
   port: 8080
