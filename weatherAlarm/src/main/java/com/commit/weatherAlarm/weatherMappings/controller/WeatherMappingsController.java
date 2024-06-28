@@ -37,7 +37,7 @@ public class WeatherMappingsController {
     @PutMapping("/{key}")
     public ResponseEntity<String> setAlarmInfo(@PathVariable String key, @RequestBody Map<String, Object> updates) throws IOException {
         weatherMappingsService.setAlarmInfo(key, updates);
-        return ResponseEntity.ok("JSON file updated successfully with key: " + key);
+        return ResponseEntity.ok("알람정보 설정완료!");
     }
 
 
