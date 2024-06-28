@@ -36,6 +36,7 @@ public class WeatherMappingsServiceImpl implements WeatherMappingsService {
         this.modelMapper = modelMapper;
     }
 
+    @Override
     public KeyView getKeyByEmail(String email) throws IOException {
         ListObjectsV2Request listObjectsReq = ListObjectsV2Request.builder()
                 .bucket(bucketName)
@@ -53,13 +54,39 @@ public class WeatherMappingsServiceImpl implements WeatherMappingsService {
         return null;
     }
 
-    public void registUserInfo(String key, Map<String, Object> jsonData) throws IOException {
+    @Override
+    public void setUserInfo(String key, Map<String, Object> jsonData) throws IOException {
         File jsonFile = convertObjectToJsonFile(jsonData);
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)
                 .key(key)
                 .build();
         s3Client.putObject(putObjectRequest, RequestBody.fromFile(jsonFile));
+    }
+
+    @Override
+    public void setAlarmInfo(String key, Map<String, Object> updates) throws IOException {
+        Map<String, Object> existingData = downloadJson(key);
+        existingData.putAll(updates);
+        setUserInfo(key, existingData);
+    }
+
+    public Map<String, Object> downloadJson(String key) throws IOException {
+        File tempFile = File.createTempFile("temp", ".json");
+        if (tempFile.exists()) {
+            tempFile.delete();
+        }
+        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .build();
+        s3Client.getObject(getObjectRequest, Paths.get(tempFile.getAbsolutePath()));
+        return convertJsonFileToObject(tempFile);
+    }
+
+    private Map<String, Object> convertJsonFileToObject(File file) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(file, Map.class);
     }
 
     private File convertObjectToJsonFile(Object data) throws IOException {
