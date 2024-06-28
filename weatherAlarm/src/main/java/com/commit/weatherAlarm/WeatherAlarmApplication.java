@@ -1,4 +1,4 @@
-package com.commit.weatheralarm;
+package com.commit.weatherAlarm;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
