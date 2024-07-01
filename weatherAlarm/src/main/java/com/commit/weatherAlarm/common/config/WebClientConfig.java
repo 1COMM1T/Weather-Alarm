@@ -1,4 +1,4 @@
-package com.commit.common.config;
+package com.commit.weatherAlarm.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

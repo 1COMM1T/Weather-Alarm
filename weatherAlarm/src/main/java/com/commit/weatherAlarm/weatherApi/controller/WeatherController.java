@@ -1,6 +1,7 @@
-package com.commit.weatherApi.controller;
+package com.commit.weatherAlarm.weatherApi.controller;
 
-import com.commit.weatherApi.service.WeatherService;
+import com.commit.weatherAlarm.weatherApi.service.WeatherService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +12,7 @@ public class WeatherController {
 
     private final WeatherService weatherService;
 
+    @Autowired
     public WeatherController(WeatherService weatherService) {
         this.weatherService = weatherService;
     }

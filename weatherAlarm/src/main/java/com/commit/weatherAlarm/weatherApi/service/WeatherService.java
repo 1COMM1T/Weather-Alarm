@@ -1,4 +1,4 @@
-package com.commit.weatherApi.service;
+package com.commit.weatherAlarm.weatherApi.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
