@@ -36,14 +36,11 @@ public class WeatherApiServiceImpl implements WeatherApiService {
                         JsonNode mainNode = root.path("main");
 
                         String description = weatherNode.path("description").asText(); // 날씨 설명
-                        String icon = weatherNode.path("icon").asText();
                         double temp = mainNode.path("temp").asDouble();
                         String cityName = root.path("name").asText();
 
-                        String iconUrl = String.format("http://openweathermap.org/img/wn/%s.png", icon);
-
                         return String.format("날씨: %s, 위치: %s, 온도: %.2f°C, 아이콘: %s",
-                                description, cityName, temp, iconUrl);
+                                description, cityName, temp);
                     } catch (Exception e) {
                         e.printStackTrace();
                         return "날씨 데이터를 파싱하는 중 오류가 발생했습니다.";
