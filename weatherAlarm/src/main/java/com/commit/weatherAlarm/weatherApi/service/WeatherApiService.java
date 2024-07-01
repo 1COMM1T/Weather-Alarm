@@ -7,19 +7,19 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Service
-public class WeatherService {
+public class WeatherApiService {
 
     private final String apiKey = "1b63b6cc88cd0a3b9c0b68934ddca166";
     private final WebClient webClient;
 
-    public WeatherService(WebClient.Builder webClientBuilder) {
+    public WeatherApiService(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.baseUrl("http://api.openweathermap.org").build();
     }
 
-    public Mono<String> getWeather(String city) {
+    public Mono<String> getWeather(String cityCode) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/data/2.5/weather")
-                        .queryParam("id", city)
+                        .queryParam("id", cityCode)
                         .queryParam("appid", apiKey)
                         .queryParam("units", "metric") // 온도를 섭씨로 받기 위해 units 파라미터 추가
                         .build())
