@@ -1,5 +1,7 @@
 package com.commit.weatherAlarm.weatherApi.service;
 
+import com.commit.weatherAlarm.weatherApi.view.WeatherInfoView;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,7 @@ public class WeatherApiServiceImpl implements WeatherApiService {
     }
 
     @Override
-    public Mono<String> getWeather(String cityCode) {
+    public Mono<WeatherInfoView> getWeather(String cityCode) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/data/2.5/weather")
                         .queryParam("id", cityCode)
@@ -39,11 +41,15 @@ public class WeatherApiServiceImpl implements WeatherApiService {
                         double temp = mainNode.path("temp").asDouble();
                         String cityName = root.path("name").asText();
 
-                        return String.format("날씨: %s, 위치: %s, 온도: %.2f°C, 아이콘: %s",
-                                description, cityName, temp);
+                        WeatherInfoView weatherInfoView = new WeatherInfoView();
+                        weatherInfoView.setWeather(description);
+                        weatherInfoView.setCityName(cityName);
+                        weatherInfoView.setTemp(temp);
+
+                        return weatherInfoView;
                     } catch (Exception e) {
                         e.printStackTrace();
-                        return "날씨 데이터를 파싱하는 중 오류가 발생했습니다.";
+                        return null;
                     }
                 });
     }
