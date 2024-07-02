@@ -51,6 +51,10 @@ public class WeatherMappingsServiceImpl implements WeatherMappingsService {
 
         ListObjectsV2Response listObjResponse = s3Client.listObjectsV2(listObjectsReq);
         for (S3Object s3Object : listObjResponse.contents()) {
+            if (!s3Object.key().endsWith(".json")) {
+                log.info("Skipping non-JSON file: " + s3Object.key());
+                continue;
+            }
             JsonNode jsonNode = downloadJsonfile(s3Object.key());
             if (findEmailInJson(jsonNode, email)) {
                 KeyView keyView = new KeyView();

@@ -40,8 +40,8 @@ public class WeatherMappingsController {
         return ResponseEntity.ok("알람정보 설정완료!");
     }
 
-    @DeleteMapping("")
-    public ResponseEntity<String> deleteUserInfo(@RequestParam(value = "key", required = true) String key) throws IOException {
+    @DeleteMapping("/{key}")
+    public ResponseEntity<String> deleteUserInfo(@PathVariable String key) throws IOException {
         weatherMappingsService.deleteUserInfo(key);
         return ResponseEntity.ok("유저정보 삭제완료!");
     }
