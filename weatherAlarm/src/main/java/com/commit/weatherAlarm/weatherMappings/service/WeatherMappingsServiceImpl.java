@@ -1,15 +1,18 @@
 package com.commit.weatherAlarm.weatherMappings.service;
 
+import com.commit.weatherAlarm.common.lambda.LambdaService;
+import com.commit.weatherAlarm.weatherApi.service.WeatherApiService;
+import com.commit.weatherAlarm.weatherApi.view.WeatherInfoView;
 import com.commit.weatherAlarm.weatherMappings.view.KeyView;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
@@ -27,15 +30,17 @@ import java.util.*;
 public class WeatherMappingsServiceImpl implements WeatherMappingsService {
 
     private S3Client s3Client;
-    private ModelMapper modelMapper;
+    private WeatherApiService weatherApiService;
+    private LambdaService lambdaService;
 
     @Value("${aws.s3.bucket}")
     private String bucketName;
 
     @Autowired
-    public WeatherMappingsServiceImpl(S3Client s3Client, ModelMapper modelMapper) {
+    public WeatherMappingsServiceImpl(S3Client s3Client, WeatherApiService weatherApiService, LambdaService lambdaService) {
         this.s3Client = s3Client;
-        this.modelMapper = modelMapper;
+        this.weatherApiService = weatherApiService;
+        this.lambdaService = lambdaService;
     }
 
     @Override
@@ -101,15 +106,27 @@ public class WeatherMappingsServiceImpl implements WeatherMappingsService {
         return null;
     }
 
-    private void getWeatherInfo() throws IOException {
+    private void getWeatherInfo(String cityCode) throws IOException {
         //날씨 api 통해서 날씨 가져와서 아래에 넣기
-
+        Mono<WeatherInfoView> weatherInfoMono = weatherApiService.getWeather(cityCode);
+        WeatherInfoView weatherInfo = weatherInfoMono.block();
+        System.out.println(weatherInfo);
     }
 
     public String getEmailFromJson(String key) throws IOException {
         JsonNode jsonNode = downloadJsonfile(key);
         System.out.println(jsonNode.get("email").asText());
         return jsonNode.get("email").asText(); // email 값을 직접 반환
+    }
+
+    public String getCityCodeFromJson(String key) throws IOException {
+        JsonNode jsonNode = downloadJsonfile(key);
+        System.out.println(jsonNode.get("cityCode").asText());
+        return jsonNode.get("cityCode").asText(); // cityCode 값을 직접 반환
+    }
+
+    private String createPayload(WeatherInfoView weatherInfo, String email) {
+        return "{\"날씨\":\"" + weatherInfo.getWeather() + "\"}";
     }
 
     // 모든 파일을 다운로드하여 time값이 현재시간과 일치하면 그 파일의 키 값을 저장
@@ -133,14 +150,28 @@ public class WeatherMappingsServiceImpl implements WeatherMappingsService {
                 // 현재 시간과 유저가 설정한 알람시간이 똑같을 때 실행
                 if (currentTime.equals(timeValue)) {
                     System.out.println("현재 시간과 일치하는 파일의 키값: " + s3Object.key());
-                    getWeatherInfo();   // 날씨 api를 통해 날씨를 가져오기
-                    getEmailFromJson(s3Object.key());   // 키 값을 통해 이메일 가져오기
+                    String email = getEmailFromJson(s3Object.key());
+                    String cityCode = getCityCodeFromJson(s3Object.key());
+                    WeatherInfoView weatherInfo = weatherApiService.getWeather(cityCode).block();
+
+                    String payload = "{" +
+                            "\"날씨\":\"" + weatherInfo.getWeather() + "\"," +
+                            "\"온도\":\"" + weatherInfo.getTemp() + "\"," +
+                            "\"지역\":\"" + weatherInfo.getCityName() + "\"," +
+                            "\"이메일\":\"" + email + "\"" +
+                            "}";
+
+                    String lambdaResponse = lambdaService.invokeLambdaFunction(
+                            "weather_alarm_test", payload);
+                    System.out.println("람다함수의 응답 : " + lambdaResponse);
+
                 }
             } catch (IOException e) {
                 log.error("Error processing file: " + s3Object.key(), e);
             }
         }
     }
+
 
     public Map<String, Object> downloadJson(String key) throws IOException {
         File tempFile = File.createTempFile("temp", ".json");
@@ -214,8 +245,4 @@ public class WeatherMappingsServiceImpl implements WeatherMappingsService {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readTree(file);
     }
-
-
-
-
 }
