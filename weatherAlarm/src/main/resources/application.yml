@@ -1,24 +1,27 @@
 spring:
-  datasource:
-    url: jdbc:mariadb://localhost:3306/commit
-    username: commit
-    password: commit
-    driver-class-name: org.mariadb.jdbc.Driver
-
   jpa:
     generate-ddl: false
     show-sql: true
     properties:
       hibernate:
         '[format_sql]': true
-    database: mysql
 
-#aws:
-#  s3:
-#    access-key: YOUR_ACCESS_KEY
-#    secret-key: YOUR_SECRET_KEY
-#    region: YOUR_AWS_REGION
-#    bucket: YOUR_BUCKET_NAME
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+aws:
+  region: ENC(BfxHk2ztQaISSP9TaKHefsKUs/NcLEuh)
+  credentials:
+    access-key: ENC(LdV8141/N8cy8v5rdxodwSneURe1S14pbSuWB7KeY34=)
+    secret-key: ENC(6+gQntcb3Uj/DpwUm6SZidulEAYEh4CU9T/l2V5N7Bs9A72k1WVs8Wtinj0+GneE0S7r2a8K7Ng=)
+  s3:
+    access-key: ENC(LdV8141/N8cy8v5rdxodwSneURe1S14pbSuWB7KeY34=)
+    secret-key: ENC(6+gQntcb3Uj/DpwUm6SZidulEAYEh4CU9T/l2V5N7Bs9A72k1WVs8Wtinj0+GneE0S7r2a8K7Ng=)
+    region: ENC(BfxHk2ztQaISSP9TaKHefsKUs/NcLEuh)
+    bucket: ENC(/yFc8jUAwMA1xky9ZwbNFSDDXRP5zvakkM3SRr95bkE=)
 
 server:
   port: 8080
