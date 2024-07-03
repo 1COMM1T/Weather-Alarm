@@ -119,13 +119,11 @@ public class WeatherMappingsServiceImpl implements WeatherMappingsService {
 
     public String getEmailFromJson(String key) throws IOException {
         JsonNode jsonNode = downloadJsonfile(key);
-        System.out.println(jsonNode.get("email").asText());
         return jsonNode.get("email").asText(); // email 값을 직접 반환
     }
 
     public String getCityCodeFromJson(String key) throws IOException {
         JsonNode jsonNode = downloadJsonfile(key);
-        System.out.println(jsonNode.get("cityCode").asText());
         return jsonNode.get("cityCode").asText(); // cityCode 값을 직접 반환
     }
 
@@ -153,7 +151,6 @@ public class WeatherMappingsServiceImpl implements WeatherMappingsService {
                 String timeValue = findTimeInJson(jsonNode);
                 // 현재 시간과 유저가 설정한 알람시간이 똑같을 때 실행
                 if (currentTime.equals(timeValue)) {
-                    System.out.println("현재 시간과 일치하는 파일의 키값: " + s3Object.key());
                     String email = getEmailFromJson(s3Object.key());
                     String cityCode = getCityCodeFromJson(s3Object.key());
                     WeatherInfoView weatherInfo = weatherApiService.getWeather(cityCode).block();
@@ -167,8 +164,6 @@ public class WeatherMappingsServiceImpl implements WeatherMappingsService {
 
                     String lambdaResponse = lambdaService.invokeLambdaFunction(
                             "weather_alarm_test", payload);
-                    System.out.println("람다함수의 응답 : " + lambdaResponse);
-
                 }
             } catch (IOException e) {
                 log.error("Error processing file: " + s3Object.key(), e);
