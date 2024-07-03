@@ -13,6 +13,10 @@ spring:
     password:
 
 aws:
+  region: ENC(BfxHk2ztQaISSP9TaKHefsKUs/NcLEuh)
+  credentials:
+    access-key: ENC(LdV8141/N8cy8v5rdxodwSneURe1S14pbSuWB7KeY34=)
+    secret-key: ENC(6+gQntcb3Uj/DpwUm6SZidulEAYEh4CU9T/l2V5N7Bs9A72k1WVs8Wtinj0+GneE0S7r2a8K7Ng=)
   s3:
     access-key: ENC(LdV8141/N8cy8v5rdxodwSneURe1S14pbSuWB7KeY34=)
     secret-key: ENC(6+gQntcb3Uj/DpwUm6SZidulEAYEh4CU9T/l2V5N7Bs9A72k1WVs8Wtinj0+GneE0S7r2a8K7Ng=)

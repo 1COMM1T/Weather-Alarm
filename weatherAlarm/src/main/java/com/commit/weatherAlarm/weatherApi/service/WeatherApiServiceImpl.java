@@ -43,7 +43,7 @@ public class WeatherApiServiceImpl implements WeatherApiService {
 
                         WeatherInfoView weatherInfoView = new WeatherInfoView();
                         weatherInfoView.setWeather(description);
-                        weatherInfoView.setCityName(cityName);
+                        weatherInfoView.setCityName(translateCityName(cityName));
                         weatherInfoView.setTemp(temp);
 
                         return weatherInfoView;
@@ -52,5 +52,26 @@ public class WeatherApiServiceImpl implements WeatherApiService {
                         return null;
                     }
                 });
+    }
+
+    private String translateCityName(String cityName) {
+        String result = "";
+        if (cityName.equals("Seoul")) {
+            result = "서울";
+        } else if (cityName.equals("Busan")) {
+            result = "부산";
+        } else if (cityName.equals("Daegu")) {
+            result = "대구";
+        } else if (cityName.equals("Incheon")) {
+            result = "인천";
+        } else if (cityName.equals("Daejeon")) {
+            result = "대전";
+        } else if (cityName.equals("Gwangju")) {
+            result = "광주";
+        } else if (cityName.equals("Ulsan")) {
+            result = "울산";
+        }
+
+        return result;
     }
 }
